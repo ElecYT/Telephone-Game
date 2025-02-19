@@ -2,7 +2,8 @@ name: telephoneGame
 version: '1.0-SNAPSHOT'
 main: me.elec.telephoneGame.TelephoneGame
 api-version: '1.21'
-depend: [voicechat]
+depend:
+  - voicechat
 commands:
   call:
     description: Call another user.
