@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nullable;
 
 
-public final class TelephoneGame extends JavaPlugin implements VoicechatPlugin {
+public final class TelephoneGame extends JavaPlugin{
     private static TelephoneGame plugin;
 
     @Nullable
@@ -40,18 +40,4 @@ public final class TelephoneGame extends JavaPlugin implements VoicechatPlugin {
         // Plugin shutdown logic
     }
 
-    @Override
-    public String getPluginId() {
-        return plugin.getPluginId();
-    }
-
-    @Override
-    public void initialize(VoicechatApi api) {
-
-    }
-
-    @Override
-    public void registerEvents(EventRegistration registration) {
-
-    }
 }
