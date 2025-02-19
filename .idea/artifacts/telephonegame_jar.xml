@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="telephonegame:jar">
+    <output-path>$USER_HOME$/AppData/Roaming/.feather/player-server/servers/9ba21143-9020-4878-85cd-5ccdc0d54427/plugins</output-path>
+    <root id="archive" name="telephonegame.jar">
+      <element id="module-output" name="telephonegame" />
+    </root>
+  </artifact>
+</component>
