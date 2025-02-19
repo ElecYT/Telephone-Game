@@ -1,20 +1,17 @@
 package me.elec.telephoneGame;
 
-import de.maxhenkel.voicechat.api.Group;
-import de.maxhenkel.voicechat.api.VoicechatServerApi;
-import de.maxhenkel.voicechat.api.VoicechatPlugin;
-import de.maxhenkel.voicechat.api.VoicechatConnection;
+import de.maxhenkel.voicechat.api.*;
+import de.maxhenkel.voicechat.api.events.EventRegistration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class VoiceChatManager {
+public class VoiceChatManager implements VoicechatPlugin {
 
-    private final VoicechatServerApi voicechatApi;
 
-    public VoiceChatManager(VoicechatServerApi api) {
-        this.voicechatApi = api;
+    public VoiceChatManager() {
+
     }
 
     public void createVoiceGroup(Player player1, Player player2) {
@@ -53,6 +50,21 @@ public class VoiceChatManager {
 
         player1.sendMessage("§aYou have been added to a voice chat group with " + player2.getName() + "!");
         player2.sendMessage("§aYou have been added to a voice chat group with " + player1.getName() + "!");
+    }
+
+    @Override
+    public String getPluginId() {
+        return plugin.getPluginId();
+    }
+
+    @Override
+    public void initialize(VoicechatApi api) {
+
+    }
+
+    @Override
+    public void registerEvents(EventRegistration registration) {
+
     }
 }
 
