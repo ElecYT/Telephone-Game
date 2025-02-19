@@ -1,6 +1,7 @@
 package me.elec.telephoneGame.commands;
 
 import me.elec.telephoneGame.TelephoneGame;
+import me.elec.telephoneGame.VoiceChatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,13 +14,13 @@ import java.util.UUID;
 
 public class CallCommand implements CommandExecutor {
 
-    private final TelephoneGame telephoneGame;
-    private final HashMap<UUID, UUID> callRequests = new HashMap<>(); // Stores who called whom
-    private final HashMap<UUID, UUID> inCalls = new HashMap<>(); // Stores who called whom
+    private final HashMap<UUID, UUID> callRequests = new HashMap<>();
+    private final VoiceChatManager voiceChatManager;
+    private final TelephoneGame plugin;
 
-
-    public CallCommand(TelephoneGame telephoneGame) {
-        this.telephoneGame = telephoneGame;
+    public CallCommand(TelephoneGame plugin,VoiceChatManager voiceChatManager) {
+        this.plugin = plugin;
+        this.voiceChatManager = voiceChatManager;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class CallCommand implements CommandExecutor {
 
         String action = args[0].toLowerCase();
 
-        // Handling the "/call <player>" command
+        // Sending a call request
         if (!action.equals("accept") && !action.equals("deny")) {
             Player target = Bukkit.getPlayer(action);
 
@@ -47,12 +48,11 @@ public class CallCommand implements CommandExecutor {
                 return true;
             }
 
-            if (callRequests.containsKey(target.getUniqueId()) || inCalls.containsKey(target.getUniqueId()) || inCalls.containsValue(target.getUniqueId()) || inCalls.containsKey(player.getUniqueId()) || inCalls.containsValue(player.getUniqueId())) {
-                player.sendMessage(ChatColor.RED + target.getName() + " already has a pending call request and/or is already in a call.");
+            if (callRequests.containsKey(target.getUniqueId())) {
+                player.sendMessage(ChatColor.RED + target.getName() + " already has a pending call request.");
                 return true;
             }
 
-            // Store the request
             callRequests.put(target.getUniqueId(), player.getUniqueId());
 
             player.sendMessage(ChatColor.GREEN + "You have called " + target.getName() + "!");
@@ -61,7 +61,7 @@ public class CallCommand implements CommandExecutor {
             return true;
         }
 
-        // Handling "/call accept"
+        // Accepting a call request
         if (action.equals("accept")) {
             if (!callRequests.containsKey(player.getUniqueId())) {
                 player.sendMessage(ChatColor.RED + "You have no pending call requests.");
@@ -76,17 +76,17 @@ public class CallCommand implements CommandExecutor {
                 return true;
             }
 
-            // Perform action (e.g., teleport)
             player.sendMessage(ChatColor.GREEN + "You accepted the call from " + caller.getName() + "!");
             caller.sendMessage(ChatColor.GREEN + player.getName() + " has accepted your call!");
 
+            // Add both players to a voice chat group
+            voiceChatManager.createVoiceGroup(caller, player);
 
             callRequests.remove(player.getUniqueId());
-            inCalls.put(caller.getUniqueId(), player.getUniqueId());
             return true;
         }
 
-        // Handling "/call deny"
+        // Denying a call request
         if (action.equals("deny")) {
             if (!callRequests.containsKey(player.getUniqueId())) {
                 player.sendMessage(ChatColor.RED + "You have no pending call requests.");

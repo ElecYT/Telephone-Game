@@ -25,14 +25,16 @@ public final class TelephoneGame extends JavaPlugin{
 
         BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
         if (service != null) {
-            voiceChatManager = new VoiceChatManager();
+            // Create one instance and register it
+            VoiceChatManager voiceChatManager = new VoiceChatManager(this);
             service.registerPlugin(voiceChatManager);
         } else {
             getLogger().warning("Simple Voice Chat API not found. Voice features will be disabled.");
         }
 
 
-        getCommand("call").setExecutor(new CallCommand(this));
+
+        getCommand("call").setExecutor(new CallCommand(this, new VoiceChatManager(this)));
     }
 
     @Override

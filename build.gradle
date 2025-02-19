@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group = 'me.elec.telephoneGame'
+version = '1.0'
+description = 'Minecraft Telephone Game Plugin'
+
+repositories {
+    // Repository for Simple Voice Chat API
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
+    // Spigot snapshots repository is needed for the Spigot API
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    mavenCentral()
+}
+
+dependencies {
+    // Spigot API (adjust the version as needed)
+    compileOnly 'org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT'
+    // Simple Voice Chat API dependency – update the version if necessary
+    implementation "de.maxhenkel.voicechat:voicechat-api:2.5.27"
+}

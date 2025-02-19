@@ -1,28 +1,70 @@
 package me.elec.telephoneGame;
 
-import de.maxhenkel.voicechat.api.*;
+import de.maxhenkel.voicechat.api.Group;
+import de.maxhenkel.voicechat.api.VoicechatApi;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
+import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
-import org.bukkit.Bukkit;
+import de.maxhenkel.voicechat.api.events.ClientVoicechatConnectionEvent;
+import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class VoiceChatManager implements VoicechatPlugin {
 
+    private final TelephoneGame plugin;
+    private VoicechatApi voicechatApi;
 
-    public VoiceChatManager() {
+    // Maintain a map of player UUIDs to their voice chat connections.
+    private final Map<UUID, VoicechatConnection> connectionMap = new HashMap<>();
 
+    public VoiceChatManager(TelephoneGame plugin) {
+        this.plugin = plugin;
     }
 
+    @Override
+    public void initialize(VoicechatApi api) {
+        this.voicechatApi = api;
+        plugin.getLogger().info("Voicechat API has been initialized.");
+    }
+
+    @Override
+    public void registerEvents(EventRegistration registration) {
+        // Register the ClientVoicechatConnectionEvent listener.
+        registration.registerEvent(MicrophonePacketEvent.class, event -> {
+            // Instead of getConnection(), we call connection() per your API version.
+            // (If your Javadoc uses a different name, adjust accordingly.)
+            VoicechatConnection conn = event.getSenderConnection();
+            UUID playerUUID = event.getSenderConnection().getPlayer().getUuid();
+            if (event.getSenderConnection().isConnected()) {
+                connectionMap.put(playerUUID, conn);
+                plugin.getLogger().info("Stored connection for player: " + playerUUID);
+            } else {
+                connectionMap.remove(playerUUID);
+                plugin.getLogger().info("Removed connection for player: " + playerUUID);
+            }
+        });
+    }
+
+    @Override
+    public String getPluginId() {
+        return "telephonegame";
+    }
+
+    // Creates a voice group for two players using the stored connections.
     public void createVoiceGroup(Player player1, Player player2) {
         if (voicechatApi == null) {
-            player1.sendMessage("§cVoice chat plugin not found.");
-            player2.sendMessage("§cVoice chat plugin not found.");
+            player1.sendMessage("§cVoice chat API not available.");
+            player2.sendMessage("§cVoice chat API not available.");
             return;
         }
 
-        VoicechatConnection connection1 = voicechatApi.getConnectionOf(player1.getUniqueId()).orElse(null);
-        VoicechatConnection connection2 = voicechatApi.getConnectionOf(player2.getUniqueId()).orElse(null);
+        VoicechatConnection connection1 = connectionMap.get(player1.getUniqueId());
+        VoicechatConnection connection2 = connectionMap.get(player2.getUniqueId());
 
         if (connection1 == null || connection2 == null) {
             player1.sendMessage("§cOne of you is not connected to voice chat.");
@@ -30,12 +72,47 @@ public class VoiceChatManager implements VoicechatPlugin {
             return;
         }
 
-        // Create a unique group ID
+        // Create a unique group name.
         String groupName = "Call-" + UUID.randomUUID().toString().substring(0, 6);
-        Group group = voicechatApi.groupBuilder()
+        var group = new Group.Builder() {
+            @Override
+            public Group.Builder setId(@Nullable UUID uuid) {
+                return null;
+            }
+
+            @Override
+            public Group.Builder setName(String s) {
+                return null;
+            }
+
+            @Override
+            public Group.Builder setPassword(@Nullable String s) {
+                return null;
+            }
+
+            @Override
+            public Group.Builder setPersistent(boolean b) {
+                return null;
+            }
+
+            @Override
+            public Group.Builder setHidden(boolean b) {
+                return null;
+            }
+
+            @Override
+            public Group.Builder setType(Group.Type type) {
+                return null;
+            }
+
+            @Override
+            public Group build() {
+                return null;
+            }
+        }
                 .setName(groupName)
-                .setPersistent(false) // Group is temporary
-                .setPassword(null) // No password required
+                .setPersistent(false)  // Temporary group
+                .setPassword(null)       // No password required
                 .build();
 
         if (group == null) {
@@ -44,27 +121,11 @@ public class VoiceChatManager implements VoicechatPlugin {
             return;
         }
 
-        // Add both players to the group
+        // Assign both players to the new group.
         connection1.setGroup(group);
         connection2.setGroup(group);
 
         player1.sendMessage("§aYou have been added to a voice chat group with " + player2.getName() + "!");
         player2.sendMessage("§aYou have been added to a voice chat group with " + player1.getName() + "!");
     }
-
-    @Override
-    public String getPluginId() {
-        return plugin.getPluginId();
-    }
-
-    @Override
-    public void initialize(VoicechatApi api) {
-
-    }
-
-    @Override
-    public void registerEvents(EventRegistration registration) {
-
-    }
 }
-
