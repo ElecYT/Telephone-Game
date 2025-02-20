@@ -30,6 +30,7 @@ public class VoiceChatManager implements VoicechatPlugin {
     public void initialize(VoicechatApi api) {
         this.voicechatApi = api;
         plugin.getLogger().info("Voicechat API has been initialized.");
+        plugin.getLogger().info("Successfully hooked into voicechat API!");
     }
 
     @Override
