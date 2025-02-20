@@ -1,19 +1,19 @@
-package me.elec.telephoneGame;
+package me.elec.telephoneGameSpigot;
 
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
-import me.elec.telephoneGame.commands.CallCommand;
+import me.elec.telephoneGameSpigot.commands.CallCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 
 
-public final class TelephoneGame extends JavaPlugin{
-    private static TelephoneGame plugin;
+public final class TelephoneGameSpigot extends JavaPlugin{
+    private static TelephoneGameSpigot plugin;
 
     @Nullable
     private VoiceChatManager voiceChatManager;
@@ -24,6 +24,7 @@ public final class TelephoneGame extends JavaPlugin{
         // Plugin startup logic
 
         BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
+
         if (service != null) {
             // Create one instance and register it
             VoiceChatManager voiceChatManager = new VoiceChatManager(this);

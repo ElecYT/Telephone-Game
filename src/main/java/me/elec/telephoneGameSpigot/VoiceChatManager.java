@@ -1,4 +1,4 @@
-package me.elec.telephoneGame;
+package me.elec.telephoneGameSpigot;
 
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatApi;
@@ -16,13 +16,13 @@ import java.util.UUID;
 
 public class VoiceChatManager implements VoicechatPlugin {
 
-    private final TelephoneGame plugin;
+    private final TelephoneGameSpigot plugin;
     private VoicechatApi voicechatApi;
 
     // Maintain a map of player UUIDs to their voice chat connections.
     private final Map<UUID, VoicechatConnection> connectionMap = new HashMap<>();
 
-    public VoiceChatManager(TelephoneGame plugin) {
+    public VoiceChatManager(TelephoneGameSpigot plugin) {
         this.plugin = plugin;
     }
 

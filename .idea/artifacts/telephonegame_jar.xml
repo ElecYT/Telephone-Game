@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="TelephoneGame:jar">
-    <output-path>$USER_HOME$/Downloads</output-path>
-    <root id="archive" name="TelephoneGame.jar">
-      <element id="module-output" name="TelephoneGame.main" />
-      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.maxhenkel.voicechat/voicechat-api/2.5.27/7cf92f376aac879e1ccb16d43391c3a6db683402/voicechat-api-2.5.27.jar" path-in-jar="/" />
-    </root>
-  </artifact>
-</component>

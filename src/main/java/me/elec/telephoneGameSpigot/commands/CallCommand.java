@@ -1,7 +1,7 @@
-package me.elec.telephoneGame.commands;
+package me.elec.telephoneGameSpigot.commands;
 
-import me.elec.telephoneGame.TelephoneGame;
-import me.elec.telephoneGame.VoiceChatManager;
+import me.elec.telephoneGameSpigot.TelephoneGameSpigot;
+import me.elec.telephoneGameSpigot.VoiceChatManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,9 +16,9 @@ public class CallCommand implements CommandExecutor {
 
     private final HashMap<UUID, UUID> callRequests = new HashMap<>();
     private final VoiceChatManager voiceChatManager;
-    private final TelephoneGame plugin;
+    private final TelephoneGameSpigot plugin;
 
-    public CallCommand(TelephoneGame plugin,VoiceChatManager voiceChatManager) {
+    public CallCommand(TelephoneGameSpigot plugin,VoiceChatManager voiceChatManager) {
         this.plugin = plugin;
         this.voiceChatManager = voiceChatManager;
     }
